@@ -8,11 +8,11 @@ const App = () => {
   return (
     <div className='app'>
       <NavBar />
-   {/* <Routes>
-        <Route Component='/' element={<Home />} />
-        <Route Component='/cart' element={<Cart />} />
-        <Route Component='/place-order' element={<PlaceOrder />} />
-      </Routes> */}
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/cart' element={<Cart />} />
+        <Route path='/place-order' element={<PlaceOrder />} />
+      </Routes>
     </div>
   )
 }
