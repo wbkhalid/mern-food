@@ -11,7 +11,9 @@ const addFood = async (req, res) => {
     image: image_filename,
   });
   try {
+    console.log('.....');
     await food.save();
+    console.log('//////////////');
     res.json({
       success: true,
       message: "Food Added",
