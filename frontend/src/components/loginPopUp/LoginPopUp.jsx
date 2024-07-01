@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { assets } from '../../assets/assets'
 import './loginPopup.css'
+import axios from 'axios'
+import { StoreContext } from '../../context/StoreContext'
 
 const LoginPopUp = ({ setShowLogin }) => {
   const [currState, setCurrState] = useState('SignUp')
+  const { token, setToken } = useContext(StoreContext)
   const [data, setData] = useState({
     name: '',
     email: "",
@@ -16,9 +19,30 @@ const LoginPopUp = ({ setShowLogin }) => {
 
     setData(data => ({ ...data, [name]: value }))
   }
+  const url = 'http://localhost:4000'
+  const onLogin = async (e) => {
+    e.preventDefault()
+    let newUrl = url
+    if (currState === 'Login') {
+      newUrl += '/api/user/login'
+    }
+    else {
+      newUrl += '/api/user/register'
+    }
+    const response = await axios.post(newUrl, data)
+    console.log(response);
+    if (response.data.success) {
+      setToken(response.data.token)
+      localStorage.setItem('token', response.data.token)
+      setShowLogin(false)
+    } else {
+      alert(response.data.message)
+    }
+  }
+
   return (
     <div className='login-popup'>
-      <form className="login-popup-container">
+      <form className="login-popup-container" onSubmit={onLogin}>
         <div className="login-popup-title">
           <h2>{currState}</h2>
           <img src={assets.cross_icon} alt="" onClick={() => setShowLogin(false)} />

@@ -4,8 +4,8 @@ import { food_list } from "../assets/assets";
 export const StoreContext = createContext(null);
 
 export const StoreContextProvider = ({ children }) => {
+  const [token, setToken] = useState('')
   const [cartItem, setCartItem] = useState({});
-
   const addToCart = (itemId) => {
     if (!cartItem[itemId]) {
       setCartItem((prev) => ({ ...prev, [itemId]: 1 }));
@@ -35,6 +35,7 @@ export const StoreContextProvider = ({ children }) => {
     addToCart,
     removeToCart,
     getTotalCartAmount,
+    token, setToken
   };
   return (
     <StoreContext.Provider value={contextValue}>
