@@ -4,7 +4,7 @@ import { food_list } from "../assets/assets";
 export const StoreContext = createContext(null);
 
 export const StoreContextProvider = ({ children }) => {
-  const [token, setToken] = useState('')
+  const [token, setToken] = useState("");
   const [cartItem, setCartItem] = useState({});
   const addToCart = (itemId) => {
     if (!cartItem[itemId]) {
@@ -35,8 +35,14 @@ export const StoreContextProvider = ({ children }) => {
     addToCart,
     removeToCart,
     getTotalCartAmount,
-    token, setToken
+    token,
+    setToken,
   };
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
   return (
     <StoreContext.Provider value={contextValue}>
       {children}

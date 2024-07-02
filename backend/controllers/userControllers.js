@@ -10,7 +10,7 @@ const createToken = (id) => jwt.sign({ id }, process.env.JWT_TOKEN)
 
 
 const loginUser = async (req, res) => {
-    const { name, password } = req.body
+    const { email, password } = req.body
     try {
         const user = await userModel.findOne({ email })
         if (!user) {
