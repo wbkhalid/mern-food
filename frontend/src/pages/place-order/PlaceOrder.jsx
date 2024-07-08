@@ -4,7 +4,7 @@ import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
 
 const PlaceOrder = () => {
-  const { getTotalCartAmount, token, food_list, cartItms, url } =
+  const { getTotalCartAmount, token, food_list, cartItem, URL } =
     useContext(StoreContext);
   const [data, setData] = useState({
     firstName: "",
@@ -27,10 +27,10 @@ const PlaceOrder = () => {
   const placeOrder = async (event) => {
     event.preventDefault();
     const orderItems = [];
-    food_list.map((item) => {
-      if (cartItms[item._id] > 0) {
+    food_list?.map((item) => {
+      if (cartItem[item?._id] > 0) {
         let itemInfo = item;
-        itemInfo["quantity"] = cartItms[item._id];
+        itemInfo["quantity"] = cartItem[item?._id];
         orderItems.push(itemInfo);
       }
     });
@@ -39,7 +39,7 @@ const PlaceOrder = () => {
       items: orderItems,
       amount: getTotalCartAmount() + 2,
     };
-    let response = await axios.post(`${url}/api/order/placw`, orderData, {
+    let response = await axios.post(`${URL}/api/order/place`, orderData, {
       headers: { token },
     });
     if (response.data.success) {

@@ -7,8 +7,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 const placeOrder = async (req, res) => {
   try {
+    console.log(req.body.userId);
     const newOrder = new orderModel({
-      userId: req.user._id,
+      userId: req.body.userId,
       items: req.body.items,
       amount: req.body.amount,
       address: req.body.address,
@@ -46,6 +47,7 @@ const placeOrder = async (req, res) => {
     });
     res.json({ success: true, session_url: session.url });
   } catch (error) {
+    console.log(error);
     res.json({ success: false, message: 'Error' });
   }
 };
