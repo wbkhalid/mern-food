@@ -17,16 +17,16 @@ const placeOrder = async (req, res) => {
     await newOrder.save();
     await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
 
-    const lineItems = req.body.items.map((item) => {
+    const lineItems = req?.body?.items?.map((item) => {
       return {
         price_data: {
           currency: "pkr",
           product_data: {
-            name: item.name,
+            name: item?.name,
           },
-          unit_currency: item.amount * 100 * 280,
+          unit_amount: item?.price * 100 * 280,
         },
-        quantity: item.quantity,
+        quantity: item?.quantity,
       };
     });
     lineItems.push({
@@ -47,9 +47,26 @@ const placeOrder = async (req, res) => {
     });
     res.json({ success: true, session_url: session.url });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: 'Error' });
+    console.log(error.message);
+    res.json({ success: false, message: "Error" });
   }
 };
 
-export { placeOrder };
+const verifyOrder = async (req, res) => {
+  const { orderId, success } = req.body;
+
+  try {
+    if (success == "true") {
+      await orderModel.findByIdAndUpdate(orderId, { payment: true });
+      res.json({ success: true, message: "paid" });
+    } else {
+      await orderModel.findByIdAndDelete(orderId);
+      res.json({ success: false, message: "not paid" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Error" });
+  }
+};
+
+export { placeOrder, verifyOrder };
